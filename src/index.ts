@@ -10,11 +10,9 @@ app.get("/", (req, res) => {
     res.sendStatus(200)
 })
 
-//run
-app.listen(PORT, () => console.log(`app is listening on port ${PORT}`))
-
-
-
 export function funzione(params:any) {
     return params
 }
+
+//run
+app.listen(`${HOST}:${PORT}`, () => console.log(`app is listening on ${HOST}:${PORT}`))
