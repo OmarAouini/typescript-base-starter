@@ -11,3 +11,9 @@ app.get("/", (req, res) => {
 
 //run
 app.listen(PORT, () => console.log(`app is listening on port ${PORT}`))
+
+
+
+export function funzione(params:any) {
+    return params
+}
