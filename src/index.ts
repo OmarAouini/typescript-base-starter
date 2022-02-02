@@ -2,7 +2,8 @@ import 'dotenv/config'
 import express from 'express';
 
 const app = express()
-const PORT = process.env.PORT
+const HOST = '0.0.0.0';
+const PORT = '8080'
 
 //healthcheck endpoint
 app.get("/", (req, res) => {
