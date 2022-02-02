@@ -2,8 +2,7 @@ import 'dotenv/config'
 import express from 'express';
 
 const app = express()
-const HOST = '0.0.0.0';
-const PORT = '8080'
+const PORT = 8080
 
 //healthcheck endpoint
 app.get("/", (req, res) => {
@@ -15,4 +14,4 @@ export function funzione(params:any) {
 }
 
 //run
-app.listen(`${HOST}:${PORT}`, () => console.log(`app is listening on ${HOST}:${PORT}`))
+app.listen(PORT, () => console.log(`app is listening on port ${PORT}`))
