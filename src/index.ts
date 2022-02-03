@@ -23,6 +23,11 @@ app.get("/", (_, res) => {
     res.sendStatus(200)
 })
 
+//404 handler
+app.get('*', (req, res) => {
+    res.sendStatus(404);
+  });
+
 export function funzione(params:any) {
     return params
 }
