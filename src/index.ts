@@ -19,7 +19,7 @@ app.use(morgan("common"))
 app.use(compression());
 
 //healthcheck endpoint
-app.get("/", (_, res) => {
+app.get("/health", (_, res) => {
     res.sendStatus(200)
 })
 
