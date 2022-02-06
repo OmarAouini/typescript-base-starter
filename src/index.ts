@@ -1,11 +1,12 @@
 import 'dotenv/config'
 import express from 'express';
-const cors = require('cors')
-const helmet = require('helmet')
-const morgan = require('morgan')
-const compression = require("compression");
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import compression from "compression";
 
 const app = express()
+const HOST = '0.0.0.0'
 const PORT = 8080
 
 // middlewares
@@ -20,7 +21,7 @@ app.use(compression());
 
 //healthcheck endpoint
 app.get("/health", (_, res) => {
-    res.sendStatus(200)
+    res.status(200).json({"message": "OK"})
 })
 
 //404 handler
@@ -33,4 +34,4 @@ export function funzione(params:any) {
 }
 
 //run
-app.listen(PORT, () => console.log(`app is listening on port ${PORT}`))
+app.listen(PORT, HOST, () => console.log(`app is listening on ${HOST}:${PORT}`))
