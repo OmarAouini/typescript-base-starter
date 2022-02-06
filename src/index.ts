@@ -25,13 +25,9 @@ app.get("/health", (_, res) => {
 })
 
 //404 handler
-app.get('*', (req, res) => {
+app.get('*', (_, res) => {
     res.sendStatus(404);
   });
 
-export function funzione(params:any) {
-    return params
-}
-
 //run
-app.listen(PORT, HOST, () => console.log(`app is listening on ${HOST}:${PORT}`))
+app.listen(PORT, HOST, () => console.log(`app is listening on port ${HOST}:${PORT}`))
