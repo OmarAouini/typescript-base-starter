@@ -6,6 +6,7 @@ import compression from "compression";
 import 'dotenv/config'
 import { CompanyController } from './company/controller';
 import { ProjectController } from './project/controller';
+import { createConnection } from 'typeorm';
 
 export class Server {
     
@@ -14,11 +15,14 @@ export class Server {
     private projectController: ProjectController;
 
     constructor() {
+        //express
         this.app = express()
         this.configuration()
         //controllers
         this.companyController = new CompanyController()
         this.projectController = new ProjectController()
+        //db connection
+        this.database_connection()
         //routes
         this.routes()
     }
@@ -34,6 +38,21 @@ export class Server {
         this.app.use(helmet())
         this.app.use(morgan("common"))
         this.app.use(compression());
+    }
+
+    public async database_connection() {
+        await createConnection({
+            type: 'mysql',
+            host: "localhost",
+            port: 3306,
+            username: "root",
+            password: "root",
+            database: "mysite",
+            entities: ["dist/models/**/*.js"],
+            synchronize: true,
+            name: "mysite",
+            ssl: false
+        }).catch(err => console.log(err))
     }
 
     public routes() {
