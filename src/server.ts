@@ -4,14 +4,22 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import compression from "compression";
 import 'dotenv/config'
+import { CompanyController } from './company/controller';
+import { ProjectController } from './project/controller';
 
 export class Server {
     
     private app: express.Application
+    private companyController: CompanyController;
+    private projectController: ProjectController;
 
     constructor() {
         this.app = express()
         this.configuration()
+        //controllers
+        this.companyController = new CompanyController()
+        this.projectController = new ProjectController()
+        //routes
         this.routes()
     }
 
@@ -29,6 +37,9 @@ export class Server {
     }
 
     public routes() {
+        this.app.use('/api/companies', this.companyController.router)
+        this.app.use('/api/projects', this.projectController.router)
+
         this.app.get("/health" ,(_, res: Response) => {
             res.status(200).json({"message": "OK"})
          })
