@@ -1,9 +1,10 @@
 import 'dotenv/config'
-import express from 'express';
+import express, { Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import compression from "compression";
+import { Customer } from './customers/customer.model';
 
 const app = express()
 const HOST = '0.0.0.0'
@@ -19,13 +20,14 @@ app.use(helmet())
 app.use(morgan("common"))
 app.use(compression());
 
+
 //healthcheck endpoint
-app.get("/health", (_, res) => {
-    res.status(200).json({"message": "OK"})
+app.get("/health" ,(_, res: Response) => {
+   res.status(200).json({"message": "OK"})
 })
 
 //404 handler
-app.get('*', (_, res) => {
+app.get('*', (_, res: Response) => {
     res.sendStatus(404);
   });
 
