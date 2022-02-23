@@ -4,9 +4,10 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import compression from "compression";
 import 'dotenv/config'
-import { CompanyController } from './company/controller';
+import { CompanyController } from './company/company.controller';
 import { ProjectController } from './project/controller';
 import { createConnection } from 'typeorm';
+import { Company } from './models/Company';
 
 export class Server {
     
@@ -48,9 +49,11 @@ export class Server {
             username: "root",
             password: "root",
             database: "mysite",
-            entities: ["dist/models/**/*.js"],
+            entities: [
+                Company,
+            ],
             synchronize: true,
-            name: "mysite",
+            name: "default",
             ssl: false
         }).catch(err => console.log(err))
     }

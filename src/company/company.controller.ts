@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express"
-import { CompanyService } from "./service";
+import { CompanyService } from "./company.service";
 
 
 export class CompanyController {
@@ -13,7 +13,7 @@ export class CompanyController {
     }
 
     public all = (_req:Request,res:Response) => {
-        res.send(this.companyService.all())
+        res.status(200).json(this.companyService.all())
     }
 
     public routes() {
