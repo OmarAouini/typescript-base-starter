@@ -7,7 +7,7 @@ import 'dotenv/config'
 import { CompanyController } from './company/company.controller';
 import { ProjectController } from './project/controller';
 import { createConnection } from 'typeorm';
-import { Company } from './models/Company';
+import { Company } from './models/company.model';
 
 export class Server {
     
