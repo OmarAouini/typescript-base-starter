@@ -10,16 +10,16 @@ export class UserController {
         this.routes()
     }
 
-    findall = (_req: Request, res: Response) => {
-        prisma.post.findMany({}).then(data => {
+    findall = async (_req: Request, res: Response) => {
+        await prisma.post.findMany({}).then(data => {
             return res.json(new ApiResponse("OK", data))
         }).catch(err => {
             return res.status(500).json(new ApiResponse("KO", err))
         })
     }
 
-    findByid = (req: Request, res: Response) => {
-        prisma.post.findUnique({
+    findByid = async (req: Request, res: Response) => {
+        await prisma.post.findUnique({
             where: {
                 id: parseInt(req.params.id)
             }
