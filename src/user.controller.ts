@@ -11,9 +11,11 @@ export class UserController {
     }
 
     findall = async (_req: Request, res: Response) => {
-        await prisma.post.findMany({
+        await prisma.user.findMany({
             include: {
-                author: true
+                posts: true,
+                profile: true
+
             }
         }).then(data => {
             return res.json(new ApiResponse("OK", data))
@@ -23,12 +25,13 @@ export class UserController {
     }
 
     findByid = async (req: Request, res: Response) => {
-        await prisma.post.findUnique({
+        await prisma.user.findUnique({
             where: {
                 id: parseInt(req.params.id)
             },
             include: {
-                author: true
+                posts: true,
+                profile: true
             }
         }).then(data => {
             if (!data) {
@@ -40,8 +43,22 @@ export class UserController {
         })
     }
 
+    add = async (req:Request, res:Response) => {
+        if (!req.body) {
+            return res.status(400).json(new ApiResponse("KO", "missing body"))
+        }
+        await prisma.user.create({
+            data: req.body
+        }).then(data => {
+            return res.status(201).json(new ApiResponse("OK", data))
+        }).catch(err => {
+            return res.status(500).json(new ApiResponse("KO", err))
+        })
+    }
+
     public routes() {
         this.router.get('/', this.findall)
         this.router.get('/:id', this.findByid)
+        this.router.post('/', this.add)
     }
 }
