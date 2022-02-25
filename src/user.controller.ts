@@ -11,7 +11,11 @@ export class UserController {
     }
 
     findall = async (_req: Request, res: Response) => {
-        await prisma.post.findMany({}).then(data => {
+        await prisma.post.findMany({
+            include: {
+                author: true
+            }
+        }).then(data => {
             return res.json(new ApiResponse("OK", data))
         }).catch(err => {
             return res.status(500).json(new ApiResponse("KO", err))
@@ -22,6 +26,9 @@ export class UserController {
         await prisma.post.findUnique({
             where: {
                 id: parseInt(req.params.id)
+            },
+            include: {
+                author: true
             }
         }).then(data => {
             if (!data) {
