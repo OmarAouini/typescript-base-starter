@@ -4,28 +4,23 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import compression from "compression";
 import 'dotenv/config'
-import { CompanyController } from './company/company.controller';
-import { ProjectController } from './project/controller';
-import { createConnection } from 'typeorm';
-import { Company } from './models/Company';
+import { UserController } from './user.controller';
 
 export class Server {
     
     private app: express.Application
-    private companyController: CompanyController;
-    private projectController: ProjectController;
+    private userController: UserController;
+    // private projectController: ProjectController;
 
     constructor() {
         //express
         this.app = express()
         this.configuration()
         //controllers
-        this.companyController = new CompanyController()
-        this.projectController = new ProjectController()
-        //db connection
-        this.database_connection()
+        this.userController = new UserController()
         //routes
         this.routes()
+
     }
 
     public configuration() {
@@ -41,26 +36,10 @@ export class Server {
         this.app.use(compression());
     }
 
-    public async database_connection() {
-        await createConnection({
-            type: 'mysql',
-            host: "localhost",
-            port: 3306,
-            username: "root",
-            password: "root",
-            database: "mysite",
-            entities: [
-                Company,
-            ],
-            synchronize: true,
-            name: "default",
-            ssl: false
-        }).catch(err => console.log(err))
-    }
-
-    public routes() {
-        this.app.use('/api/companies', this.companyController.router)
-        this.app.use('/api/projects', this.projectController.router)
+    public async routes() {
+        this.app.use('/api/users', this.userController.router)
+        // this.app.use('/api/companies', this.companyController.router)
+        // this.app.use('/api/projects', this.projectController.router)
 
         this.app.get("/health" ,(_, res: Response) => {
             res.status(200).json({"message": "OK"})
