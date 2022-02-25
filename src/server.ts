@@ -46,11 +46,11 @@ export class Server {
               }
               return null;
             }
-          }).unless({path: '/public'})) // path starting with public no auth
+          }).unless({path: [/^\/api\/public\/.*/]})) // path starting with /api/public no auth
     }
 
     public async routes() {
-        this.app.use('/api/users', this.userController.router)
+        this.app.use('/api/public/users', this.userController.router)
      
         this.app.get("/health" ,(_, res: Response) => {
             res.status(200).json({"message": "OK"})
@@ -58,10 +58,6 @@ export class Server {
          //404 handler
         this.app.get('*', (_, res: Response) => {
             res.sendStatus(404);
-        });
-         //401 handler
-         this.app.get('*', (_, res: Response) => {
-            res.sendStatus(401);
         });
     }
 
