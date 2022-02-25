@@ -10,7 +10,6 @@ export class Server {
     
     private app: express.Application
     private userController: UserController;
-    // private projectController: ProjectController;
 
     constructor() {
         //express
@@ -24,8 +23,8 @@ export class Server {
     }
 
     public configuration() {
-        this.app.set('port', process.env.PORT || 3000)
-        this.app.set('host', "0.0.0.0")
+        this.app.set('port', process.env.PORT || 8080)
+        this.app.set('host', process.env.HOST || "0.0.0.0")
         this.app.use(express.json())
         this.app.use(cors({
             origin: ["*"],

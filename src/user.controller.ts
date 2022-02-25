@@ -19,7 +19,11 @@ export class UserController {
     }
 
     findByid = (req: Request, res: Response) => {
-        prisma.post.findUnique({where: {id: parseInt(req.params.id)}}).then(data => {
+        prisma.post.findUnique({
+            where: {
+                id: parseInt(req.params.id)
+            }
+        }).then(data => {
             if (!data) {
                 return res.status(404).json(new ApiResponse("KO",`user with id ${req.params.id} not found`))
             }
