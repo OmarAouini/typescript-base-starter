@@ -38,9 +38,7 @@ export class Server {
 
     public async routes() {
         this.app.use('/api/users', this.userController.router)
-        // this.app.use('/api/companies', this.companyController.router)
-        // this.app.use('/api/projects', this.projectController.router)
-
+     
         this.app.get("/health" ,(_, res: Response) => {
             res.status(200).json({"message": "OK"})
          })
