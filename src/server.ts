@@ -51,6 +51,8 @@ export class Server {
 
     public async routes() {
         this.app.use('/api/public/users', this.userController.router)
+        this.app.use('/api/protected/users', this.userController.router)
+
      
         this.app.get("/health" ,(_, res: Response) => {
             res.status(200).json({"message": "OK"})
