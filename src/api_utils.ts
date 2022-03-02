@@ -1,7 +1,7 @@
-export class ApiResponse {
+export class ApiResponse<T> {
     message: string
-    data: any
-    constructor(msg:string, data: any) {
+    data: T
+    constructor(msg:string, data: T) {
         this.message = msg
         this.data = data
     }
