@@ -42,7 +42,8 @@ export class Server {
             getToken: function fromHeaderOrQuerystring (req) {
               if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
                   // validation jwt logic, then return token
-                  return req.headers.authorization.split(' ')[1];
+                  let token_string = req.headers.authorization.split(' ')[1];
+                  return token_string
               } else if (req.query && req.query.token) {
                 return req.query.token;
               }
