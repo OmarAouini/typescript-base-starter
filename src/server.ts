@@ -6,6 +6,7 @@ import compression from "compression";
 import 'dotenv/config'
 import { UserController } from './user.controller';
 import jwt from 'express-jwt';
+import KEYCLOAK_PUBLIC_KEY from './constants'
 
 export class Server {
     
@@ -35,8 +36,8 @@ export class Server {
         this.app.use(morgan("common"))
         this.app.use(compression());
         this.app.use(jwt({
-            secret: process.env.JWT_SECRET || "",
-            algorithms: ['HS256'],
+            secret: KEYCLOAK_PUBLIC_KEY || "",
+            algorithms: ['RS256'],
             credentialsRequired: true,
             getToken: function fromHeaderOrQuerystring (req) {
               if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
