@@ -6,7 +6,7 @@ import compression from "compression";
 import 'dotenv/config'
 import { UserController } from './user.controller';
 import jwt from 'express-jwt';
-import KEYCLOAK_PUBLIC_KEY from './constants'
+import {KEYCLOAK_PUBLIC_KEY, HOST, PORT} from './constants'
 
 export class Server {
     
@@ -25,8 +25,8 @@ export class Server {
     }
 
     public configuration() {
-        this.app.set('port', process.env.PORT || 8080)
-        this.app.set('host', process.env.HOST || "0.0.0.0")
+        this.app.set('port', PORT)
+        this.app.set('host', HOST)
         this.app.use(express.json())
         this.app.use(cors({
             origin: ["*"],
