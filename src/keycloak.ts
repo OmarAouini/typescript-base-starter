@@ -1,11 +1,4 @@
-export class KeycloakClient {
-  private baseUrl: string
-  
-  constructor(base_url: string) {
-    this.baseUrl = base_url
-  }
-  
-  import KcAdminClient from '@keycloak/keycloak-admin-client';
+import KcAdminClient from '@keycloak/keycloak-admin-client';
 
 // To configure the client, pass an object to override any of these  options:
 // {
