@@ -39,7 +39,7 @@ export class Server {
             secret: KEYCLOAK_PUBLIC_KEY || "",
             algorithms: ['RS256'],
             credentialsRequired: true,
-            getToken: function fromHeaderOrQuerystring (req) {
+            getToken: (req) => {
               if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
                   // validation jwt logic, then return token
                   let token_string = req.headers.authorization.split(' ')[1];
