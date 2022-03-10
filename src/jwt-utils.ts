@@ -1,4 +1,4 @@
 
-export function generate_token(user:string, password: string) {
+export function generate_token(_user:string, _password: string) {
 
 }

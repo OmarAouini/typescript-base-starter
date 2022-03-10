@@ -4,13 +4,13 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import compression from "compression";
 import 'dotenv/config'
-import { UserController } from './user.controller';
+import { UserController } from './controllers/user.controller';
 import jwt from 'express-jwt';
 import {JWT_SECRET, HOST, PORT} from './constants'
 import { ApiResponse } from './api_utils';
-import { CompanyController } from './company.controller';
-import { EmployeeController } from './employee.controller';
-import { ProjectController } from './project.controller';
+import { CompanyController } from './controllers/company.controller';
+import { EmployeeController } from './controllers/employee.controller';
+import { ProjectController } from './controllers/project.controller';
 
 export class Server {
     

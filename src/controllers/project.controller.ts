@@ -1,11 +1,11 @@
-import { Employee } from "@prisma/client";
+import { Project } from "@prisma/client";
 import { Request, Response, Router } from "express";
-import { ApiResponse } from "./api_utils";
-import { prisma } from "./db";
-import { CreateEmployeeDTO } from "./dto";
-import { validateAndConvert } from "./validators";
+import { ApiResponse } from "../api_utils";
+import { prisma } from "../db";
+import { CreateProjectDTO } from "../dto";
+import { validateAndConvert } from "../validators";
 
-export class EmployeeController {
+export class ProjectController {
   public router: Router;
 
   constructor() {
@@ -14,23 +14,24 @@ export class EmployeeController {
   }
 
   findall = async (_req: Request, res: Response) => {
-    await prisma.employee
+    await prisma.project
       .findMany({
         include: {
-            tasks: true,
-            company: true
+           company: true,
+           tasks: true
         },
       })
       .then((data) => {
-        return res.json(new ApiResponse<Employee[]>("OK", data));
+        return res.json(new ApiResponse<Project[]>("OK", data));
       })
       .catch((err) => {
+        console.log(err);
         return res.status(500).json(new ApiResponse<Error>("KO", err));
       });
   };
 
   findByid = async (req: Request, res: Response) => {
-    await prisma.employee
+    await prisma.project
       .findUnique({
         where: {
           id: parseInt(req.params.id),
@@ -45,56 +46,66 @@ export class EmployeeController {
           return res
             .status(404)
             .json(
-              new ApiResponse("KO", `Employee with id ${req.params.id} not found`)
+              new ApiResponse("KO", `Project with id ${req.params.id} not found`)
             );
         }
-        return res.json(new ApiResponse<Employee>("OK", data));
+        return res.json(new ApiResponse<Project>("OK", data));
       })
       .catch((err) => {
+        console.log(err);
         return res.status(500).json(new ApiResponse<Error>("KO", err));
       });
   };
 
   add = async (req: Request, res: Response) => {
-    const conversionResult = await validateAndConvert(CreateEmployeeDTO, req.body);
+    const conversionResult = await validateAndConvert(CreateProjectDTO, req.body);
     if (conversionResult.error) {
       return res
         .status(400)
         .json(new ApiResponse<Error>("KO", conversionResult.error));
     }
-    await prisma.employee
+    await prisma.project
       .create({
-        data: conversionResult.data,
+        data: {
+          name: conversionResult.data.name,
+          category: conversionResult.data.category,
+          expenses: conversionResult.data.expenses,
+          incomes: conversionResult.data.incomes,
+          start_at: new Date(conversionResult.data.start_at),
+          updated_at: new Date(conversionResult.data.updated_at),
+          end_at: new Date(conversionResult.data.end_at),
+          company_id: conversionResult.data.company_id
+        },
       })
       .then((data) => {
-        return res.status(201).json(new ApiResponse<Employee>("OK", data));
+        return res.status(201).json(new ApiResponse<Project>("OK", data));
       })
       .catch((err) => {
+        console.log(err);
         return res.status(500).json(new ApiResponse<Error>("KO", err));
       });
   };
 
   update = async (req: Request, res: Response) => {
-    const conversionResult = await validateAndConvert(CreateEmployeeDTO, req.body);
+    const conversionResult = await validateAndConvert(CreateProjectDTO, req.body);
     if (conversionResult.error) {
       return res
         .status(400)
         .json(new ApiResponse<Error>("KO", conversionResult.error));
     }
-    await prisma.employee
+    await prisma.project
       .update({
           where: {
               id: parseInt(req.params.id)
             },
           data: {
             name: conversionResult.data.name,
-            surname: conversionResult.data.surname,
-            age: conversionResult.data.age,
-            email: conversionResult.data.email,
-            address: conversionResult.data.address,
-            phone_number: conversionResult.data.phone_number,
-            vat_code: conversionResult.data.vat_code,
-            qualification: conversionResult.data.qualification,
+            category: conversionResult.data.category,
+            expenses: conversionResult.data.expenses,
+            incomes: conversionResult.data.incomes,
+            start_at: new Date(conversionResult.data.start_at),
+            updated_at: new Date(conversionResult.data.updated_at),
+            end_at: new Date(conversionResult.data.end_at),
             company_id: conversionResult.data.company_id
           }
       })
@@ -102,7 +113,8 @@ export class EmployeeController {
         return res.status(200).json(new ApiResponse("OK", data));
       })
       .catch((err) => {
-        return res.status(500).json(new ApiResponse<Error>("KO", err));
+        console.log(err);
+        return res.status(500).json(new ApiResponse<Error>("KO", err.toString()));
       });
   };
 

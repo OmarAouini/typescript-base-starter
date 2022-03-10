@@ -1,9 +1,9 @@
 import { Company } from "@prisma/client";
 import { Request, Response, Router } from "express";
-import { ApiResponse } from "./api_utils";
-import { prisma } from "./db";
-import { CreateCompanyDTO } from "./dto";
-import { validateAndConvert } from "./validators";
+import { ApiResponse } from "../api_utils";
+import { prisma } from "../db";
+import { CreateCompanyDTO } from "../dto";
+import { validateAndConvert } from "../validators";
 
 export class CompanyController {
   public router: Router;
