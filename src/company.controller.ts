@@ -74,9 +74,39 @@ export class CompanyController {
       });
   };
 
+  update = async (req: Request, res: Response) => {
+    const conversionResult = await validateAndConvert(CreateCompanyDTO, req.body);
+    if (conversionResult.error) {
+      return res
+        .status(400)
+        .json(new ApiResponse<Error>("KO", conversionResult.error));
+    }
+    await prisma.company
+      .update({
+          where: {
+              id: parseInt(req.params.id)
+            },
+          data: {
+            name: conversionResult.data.name,
+            email: conversionResult.data.email,
+            address: conversionResult.data.address,
+            phone_number: conversionResult.data.phone_number,
+            vat_code:  conversionResult.data.vat_code
+          }
+      })
+      .then((data) => {
+        return res.status(200).json(new ApiResponse("OK", data));
+      })
+      .catch((err) => {
+        return res.status(500).json(new ApiResponse<Error>("KO", err));
+      });
+  };
+
+
   public routes() {
     this.router.get("/", this.findall);
     this.router.get("/:id", this.findByid);
+    this.router.put("/:id", this.update);
     this.router.post("/", this.add);
   }
 }
