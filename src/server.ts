@@ -8,11 +8,13 @@ import { UserController } from './user.controller';
 import jwt from 'express-jwt';
 import {JWT_SECRET, HOST, PORT} from './constants'
 import { ApiResponse } from './api_utils';
+import { CompanyController } from './company.controller';
 
 export class Server {
     
     private app: express.Application
     private userController: UserController;
+    private companyController: CompanyController;
 
     constructor() {
         //express
@@ -20,6 +22,7 @@ export class Server {
         this.configuration()
         //controllers
         this.userController = new UserController()
+        this.companyController = new CompanyController()
         //routes
         this.routes()
     }
@@ -53,8 +56,12 @@ export class Server {
     }
 
     public async routes() {
+        //users
         this.app.use('/api/public/users', this.userController.router)
         this.app.use('/api/protected/users', this.userController.router)
+        //company
+        this.app.use('/api/public/companies', this.companyController.router)
+
      
         this.app.get("/health" ,(_, res: Response) => {
             res.status(200).json(new ApiResponse<string>("OK", "health"))
