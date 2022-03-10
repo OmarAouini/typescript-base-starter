@@ -9,12 +9,16 @@ import jwt from 'express-jwt';
 import {JWT_SECRET, HOST, PORT} from './constants'
 import { ApiResponse } from './api_utils';
 import { CompanyController } from './company.controller';
+import { EmployeeController } from './employee.controller';
+import { ProjectController } from './project.controller';
 
 export class Server {
     
     private app: express.Application
     private userController: UserController;
     private companyController: CompanyController;
+    private employeeController: EmployeeController;
+    private projectController: ProjectController;
 
     constructor() {
         //express
@@ -23,6 +27,8 @@ export class Server {
         //controllers
         this.userController = new UserController()
         this.companyController = new CompanyController()
+        this.employeeController = new EmployeeController()
+        this.projectController = new ProjectController()
         //routes
         this.routes()
     }
@@ -61,7 +67,10 @@ export class Server {
         this.app.use('/api/protected/users', this.userController.router)
         //company
         this.app.use('/api/public/companies', this.companyController.router)
-
+        //employees
+        this.app.use('/api/public/employees', this.employeeController.router)
+        //projects
+        this.app.use('/api/public/projects', this.projectController.router)
      
         this.app.get("/health" ,(_, res: Response) => {
             res.status(200).json(new ApiResponse<string>("OK", "health"))
