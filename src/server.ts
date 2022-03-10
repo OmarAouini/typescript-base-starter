@@ -6,7 +6,8 @@ import compression from "compression";
 import 'dotenv/config'
 import { UserController } from './user.controller';
 import jwt from 'express-jwt';
-import {KEYCLOAK_PUBLIC_KEY, HOST, PORT} from './constants'
+import {JWT_SECRET, HOST, PORT} from './constants'
+import { ApiResponse } from './api_utils';
 
 export class Server {
     
@@ -21,7 +22,6 @@ export class Server {
         this.userController = new UserController()
         //routes
         this.routes()
-
     }
 
     public configuration() {
@@ -36,29 +36,28 @@ export class Server {
         this.app.use(morgan("common"))
         this.app.use(compression());
         this.app.use(jwt({
-            secret: KEYCLOAK_PUBLIC_KEY || "",
-            algorithms: ['RS256'],
+            secret: JWT_SECRET || "",
+            algorithms: ['HS256'],
             credentialsRequired: true,
             getToken: (req) => {
-              if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-                  // validation jwt logic, then return token
-                  let token_string = req.headers.authorization.split(' ')[1];
-                  return token_string
-              } else if (req.query && req.query.token) {
-                return req.query.token;
-              }
-              return null;
+                if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+                    // validation jwt logic, then return token
+                    let token_string = req.headers.authorization.split(' ')[1];
+                    return token_string
+                } else if (req.query && req.query.token) {
+                  return req.query.token;
+                }
+                return null;
             }
-          }).unless({path: [/^\/api\/public\/.*/]})) // path starting with /api/public no auth
+          }).unless({path: [/^\/api\/public\/.*/]})) // exclude auth check for api with path: /api/public
     }
 
     public async routes() {
         this.app.use('/api/public/users', this.userController.router)
         this.app.use('/api/protected/users', this.userController.router)
-
      
         this.app.get("/health" ,(_, res: Response) => {
-            res.status(200).json({"message": "OK"})
+            res.status(200).json(new ApiResponse<string>("OK", "health"))
          })
          //404 handler
         this.app.get('*', (_, res: Response) => {
