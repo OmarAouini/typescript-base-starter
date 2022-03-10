@@ -75,6 +75,13 @@ export class Server {
         this.app.get("/health" ,(_, res: Response) => {
             res.status(200).json(new ApiResponse<string>("OK", "health"))
          })
+
+         //401 unauthorized
+         this.app.use(function (err, _req, res, _next) {
+            if (err.name === 'UnauthorizedError') {
+                res.status(401).send(new ApiResponse<string>("KO","unauthorized"));
+            }
+        });
          //404 handler
         this.app.get('*', (_, res: Response) => {
             res.sendStatus(404);
