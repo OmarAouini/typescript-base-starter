@@ -77,3 +77,24 @@ export class CreateProjectDTO {
     @IsDefined()
     company_id: number;
 }
+
+
+export class CreateTaskDTO {
+    @IsDefined()
+    title: string;
+    @IsDefined()
+    category: string;
+    @IsDefined()
+    description: string;
+    @IsDefined()
+    @IsDateString()
+    start_at: Date;
+    @IsDefined()
+    @IsDateString()
+    updated_at: Date;
+    @IsDefined()
+    @IsDateString()
+    end_at: Date;
+    @IsDefined()
+    project_id: number;
+}

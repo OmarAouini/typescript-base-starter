@@ -11,6 +11,7 @@ import { ApiResponse } from './api_utils';
 import { CompanyController } from './controllers/company.controller';
 import { EmployeeController } from './controllers/employee.controller';
 import { ProjectController } from './controllers/project.controller';
+import { TaskController } from './controllers/task.controller';
 
 export class Server {
     
@@ -19,6 +20,7 @@ export class Server {
     private companyController: CompanyController;
     private employeeController: EmployeeController;
     private projectController: ProjectController;
+    private taskController: TaskController;
 
     constructor() {
         //express
@@ -29,6 +31,7 @@ export class Server {
         this.companyController = new CompanyController()
         this.employeeController = new EmployeeController()
         this.projectController = new ProjectController()
+        this.taskController = new TaskController()
         //routes
         this.routes()
     }
@@ -71,6 +74,8 @@ export class Server {
         this.app.use('/api/public/employees', this.employeeController.router)
         //projects
         this.app.use('/api/public/projects', this.projectController.router)
+        //tasks
+        this.app.use('/api/public/tasks', this.taskController.router)
      
         this.app.get("/health" ,(_, res: Response) => {
             res.status(200).json(new ApiResponse<string>("OK", "health"))
