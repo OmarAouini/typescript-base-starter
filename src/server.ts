@@ -76,7 +76,7 @@ export class Server {
         //projects
         this.app.use(`/api/${api_version}/public/projects`, this.projectController.router)
         //tasks
-        this.app.use('/api/${api_version}/public/tasks', this.taskController.router)
+        this.app.use(`/api/${api_version}/public/tasks`, this.taskController.router)
      
         this.app.get(`/api/${api_version}/public/health` ,(_, res: Response) => {
             res.status(200).json(new ApiResponse<string>("OK", "health"))
