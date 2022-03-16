@@ -6,7 +6,7 @@ import compression from "compression";
 import 'dotenv/config'
 import { UserController } from './controllers/user.controller';
 import jwt from 'express-jwt';
-import {JWT_SECRET, HOST, PORT} from './constants'
+import { API_VERSION, JWT_SECRET, HOST, PORT } from './constants';
 import { ApiResponse } from './api_utils';
 import { CompanyController } from './controllers/company.controller';
 import { EmployeeController } from './controllers/employee.controller';
@@ -61,27 +61,28 @@ export class Server {
                 }
                 return null;
             }
-          }).unless({path: [/^\/api\/public\/.*/]})) // exclude auth check for api with path: /api/public
+          }).unless({path: [/^\/api\/.*\/public\/.*/]})) // exclude auth check for api with path: /api/${API_VERSION}/public
     }
 
     public async routes() {
+        const api_version = API_VERSION
         //users
-        this.app.use('/api/public/users', this.userController.router)
-        this.app.use('/api/protected/users', this.userController.router)
+        this.app.use(`/api/${api_version}/public/users`, this.userController.router)
+        this.app.use(`/api/${api_version}/protected/users`, this.userController.router)
         //company
-        this.app.use('/api/public/companies', this.companyController.router)
+        this.app.use(`/api/${api_version}/public/companies`, this.companyController.router)
         //employees
-        this.app.use('/api/public/employees', this.employeeController.router)
+        this.app.use(`/api/${api_version}/public/employees`, this.employeeController.router)
         //projects
-        this.app.use('/api/public/projects', this.projectController.router)
+        this.app.use(`/api/${api_version}/public/projects`, this.projectController.router)
         //tasks
-        this.app.use('/api/public/tasks', this.taskController.router)
+        this.app.use('/api/${api_version}/public/tasks', this.taskController.router)
      
-        this.app.get("/health" ,(_, res: Response) => {
+        this.app.get(`/api/${api_version}/public/health` ,(_, res: Response) => {
             res.status(200).json(new ApiResponse<string>("OK", "health"))
          })
 
-         //401 unauthorized
+         //401 unauthorized handler
          this.app.use(function (err, _req, res, _next) {
             if (err.name === 'UnauthorizedError') {
                 res.status(401).send(new ApiResponse<string>("KO","unauthorized"));
